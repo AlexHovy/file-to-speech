@@ -1,13 +1,20 @@
 import PyPDF2
 
 class FileToText:
-    def pdf_to_text(file_path):
+    def __init__(self, file_path):
+        self.file_path = file_path
+
         pdf_file_object = open(file_path, 'rb')
-        pdf_reader = PyPDF2.PdfFileReader(pdf_file_object)
+        self.pdf_reader = PyPDF2.PdfFileReader(pdf_file_object)
+        
+    @property
+    def page_count(self):
+        return self.pdf_reader.numPages
 
-        page_object = pdf_reader.getPage(16)
+    def get_text_by_index(self, index):
+        page_object = self.pdf_reader.getPage(index)
         pdf_text = page_object.extractText()
-
-        pdf_file_object.close()
-
         return pdf_text
+    
+    def close(self):
+        self.pdf_file_object.close()
